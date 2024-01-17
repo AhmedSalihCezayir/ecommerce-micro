@@ -1,0 +1,41 @@
+# IntelliJ IDEA
+.idea/
+
+# Maven
+target/
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Gradle
+build/
+
+# Logs
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Compiled Java class files
+*.class
+
+# Package Files
+*.jar
+*.war
+*.ear
+
+# IntelliJ IDEA code style files
+.idea/codeStyles/
+
+# Spring Boot specific
+logs/
+*.iml
+
+# Local configuration file (application-local.properties)
+application-local.properties
+
+# Visual Studio Code
+.vscode/
