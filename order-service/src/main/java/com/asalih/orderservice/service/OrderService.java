@@ -3,11 +3,13 @@ package com.asalih.orderservice.service;
 import com.asalih.orderservice.dto.InventoryResponse;
 import com.asalih.orderservice.dto.OrderLineItemsDto;
 import com.asalih.orderservice.dto.OrderRequest;
+import com.asalih.orderservice.event.OrderPlacedEvent;
 import com.asalih.orderservice.expection.ProductOutOfStockException;
 import com.asalih.orderservice.model.Order;
 import com.asalih.orderservice.model.OrderLineItems;
 import com.asalih.orderservice.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -22,6 +24,7 @@ import java.util.UUID;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final WebClient.Builder webClientBuilder;
+    private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
 
     public String placeOrder(OrderRequest orderRequest) {
         Order order = Order.builder().orderNumber(UUID.randomUUID().toString()).build();
@@ -46,6 +49,7 @@ public class OrderService {
 
         if (allProductsInStock) {
             orderRepository.save(order);
+            kafkaTemplate.send("notification_topic", new OrderPlacedEvent(order.getOrderNumber()));
             return "Order Placed Successfully";
         } else {
             throw new ProductOutOfStockException("Product is not in stock!");
