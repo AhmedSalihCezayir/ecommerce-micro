@@ -39,3 +39,8 @@ application-local.properties
 
 # Visual Studio Code
 .vscode/
+
+mongo-data
+mysql_keycloak_data
+postgres-order
+postgres-inventory
